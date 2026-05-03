@@ -14,3 +14,23 @@ function update(){
 /* INIT */
 renderSchedule(update);
 update();
+/* =========================
+   EXPORT JSON (CTRL + S)
+========================= */
+window.addEventListener("keydown", (e)=>{
+  if(e.ctrlKey && e.key.toLowerCase() === "s"){
+    e.preventDefault();
+
+    const data = localStorage.getItem("mpl_results") || "{}";
+
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "mpl-results.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+  }
+});

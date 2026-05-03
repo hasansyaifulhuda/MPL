@@ -2,7 +2,7 @@ import { schedule } from "./data.js";
 import { getResult, saveAllResults, resetResults } from "./match.js";
 
 /* =========================
-   TABLE
+   TABLE (KLASEMEN)
 ========================= */
 export function renderTable(teams){
 
@@ -49,10 +49,13 @@ export function renderSchedule(update){
   <div class="schedule-header">
     <h2>JADWAL</h2>
     <div>
+      <button id="importBtn">IMPORT</button>
       <button id="resetBtn">RESET</button>
-      <button id="saveAllBtn">SAVE ALL</button>
+      <button id="saveAllBtn">SAVE</button>
     </div>
   </div>
+
+  <input type="file" id="importFile" accept=".json" hidden>
   `;
 
   /* WEEK TABS */
@@ -78,13 +81,13 @@ export function renderSchedule(update){
       html += `
       <div class="match-card">
 
-        <!-- KIRI -->
+        <!-- TEAM KIRI -->
         <div class="team-side left">
           <img src="assets/logos/${m.teamA}.png">
           <span>${m.teamA}</span>
         </div>
 
-        <!-- TENGAH -->
+        <!-- SCORE -->
         <div class="center-box">
           <div class="time">${m.time}</div>
           <div class="score-box">
@@ -94,11 +97,11 @@ export function renderSchedule(update){
           </div>
         </div>
 
-        <!-- KANAN (LOGO DI POJOK KANAN) -->
+        <!-- TEAM KANAN -->
         <div class="team-side right">
-  <img src="assets/logos/${m.teamB}.png">
-  <span>${m.teamB}</span>
-</div>
+          <img src="assets/logos/${m.teamB}.png">
+          <span>${m.teamB}</span>
+        </div>
 
       </div>
       `;
@@ -124,10 +127,7 @@ export function renderSchedule(update){
      INPUT VALIDATION
   ========================= */
   document.querySelectorAll(".match-card input").forEach(inp=>{
-
-    inp.oninput = ()=>{
-      inp.value = inp.value.replace(/[^0-9]/g,"");
-    };
+    inp.oninput = ()=> inp.value = inp.value.replace(/[^0-9]/g,"");
 
     inp.onfocus = ()=>{
       if(inp.value === "0") inp.value = "";
@@ -136,7 +136,6 @@ export function renderSchedule(update){
     inp.onblur = ()=>{
       if(inp.value === "") inp.value = "0";
     };
-
   });
 
   /* =========================
@@ -152,7 +151,7 @@ export function renderSchedule(update){
     this.innerText = "Saved ✓";
 
     setTimeout(()=>{
-      this.innerText = "SAVE ALL";
+      this.innerText = "SAVE";
       this.disabled = false;
     },1500);
 
@@ -168,5 +167,38 @@ export function renderSchedule(update){
       renderSchedule(update);
       update();
     }
+  };
+
+  /* =========================
+     IMPORT JSON
+  ========================= */
+  document.getElementById("importBtn").onclick = ()=>{
+    document.getElementById("importFile").click();
+  };
+
+  document.getElementById("importFile").onchange = function(){
+
+    const file = this.files[0];
+    if(!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+      try{
+        const data = JSON.parse(e.target.result);
+
+        if(typeof data !== "object") throw "Invalid";
+
+        localStorage.setItem("mpl_results", JSON.stringify(data));
+
+        alert("Import berhasil!");
+        location.reload();
+
+      }catch(err){
+        alert("File tidak valid!");
+      }
+    };
+
+    reader.readAsText(file);
   };
 }

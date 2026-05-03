@@ -945,3 +945,48 @@ tr.playoff:hover td {
   font-size: 13px;
   font-weight: 600;
 }
+
+/* =========================
+   MOBILE FIX TABLE
+========================= */
+@media (max-width: 768px){
+
+  table{
+    font-size: 12px;
+  }
+
+  /* KOLOM RANK DIPERKECIL */
+  .rank{
+    width: 35px;
+    min-width: 35px;
+    padding: 6px 4px;
+    font-size: 12px;
+  }
+
+  /* TEAM BIAR GAK TABRAKAN */
+  .team-box{
+    gap: 6px;
+  }
+
+  .team-box img{
+    width: 20px;
+    height: 20px;
+  }
+
+  .team-box span{
+    font-size: 12px;
+  }
+
+  /* BIAR ANGKA GAK KEJEPIT */
+  td{
+    padding: 6px 4px;
+    white-space: nowrap;
+  }
+
+  /* HEADER JUGA IKUT KECIL */
+  th{
+    font-size: 11px;
+    padding: 8px 4px;
+  }
+
+}
