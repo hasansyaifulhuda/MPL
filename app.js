@@ -2,21 +2,23 @@ import { createTeams, calculate } from "./logic.js";
 import { renderSchedule, renderTable } from "./ui.js";
 import { loadResults } from "./match.js";
 
-/* LOAD DATA (WAJIB PERTAMA) */
-loadResults();
+async function init(){
 
-function update(){
-  const teams = createTeams();
-  const sorted = calculate(teams);
-  renderTable(sorted);
+  await loadResults(); // WAJIB
+
+  function update(){
+    const teams = createTeams();
+    const sorted = calculate(teams);
+    renderTable(sorted);
+  }
+
+  renderSchedule(update);
+  update();
 }
 
-/* INIT */
-renderSchedule(update);
-update();
-/* =========================
-   EXPORT JSON (CTRL + S)
-========================= */
+init();
+
+/* CTRL + S EXPORT */
 window.addEventListener("keydown", (e)=>{
   if(e.ctrlKey && e.key.toLowerCase() === "s"){
     e.preventDefault();

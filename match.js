@@ -3,12 +3,22 @@ let cache = {};
 /* =========================
    LOAD (LOCALSTORAGE)
 ========================= */
-export function loadResults(){
-  const saved = localStorage.getItem("mpl_results");
+export async function loadResults(){
 
-  if(saved){
-    cache = JSON.parse(saved);
-  } else {
+  try{
+    const res = await fetch("./data/results.json");
+    const json = await res.json();
+
+    const local = localStorage.getItem("mpl_results");
+
+    if(local){
+      cache = JSON.parse(local); // user override
+    } else {
+      cache = json; // default dari GitHub
+    }
+
+  }catch(err){
+    console.error("Gagal load JSON:", err);
     cache = {};
   }
 
@@ -38,7 +48,13 @@ export function setResult(id, a, b){
 export async function saveAllResults(schedule){
 
   schedule.forEach(week=>{
+
+    if(!week.days) return; // 🔥 FIX
+
     week.days.forEach(day=>{
+
+      if(!day.matches) return; // 🔥 FIX
+
       day.matches.forEach(m=>{
 
         const inputA = document.getElementById(m.id + "-A");
@@ -54,10 +70,11 @@ export async function saveAllResults(schedule){
         }
 
       });
+
     });
+
   });
 
-  /* SIMPAN KE LOCAL */
   localStorage.setItem("mpl_results", JSON.stringify(cache));
 }
 
