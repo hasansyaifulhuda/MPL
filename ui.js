@@ -20,7 +20,7 @@ export function renderTable(teams){
 
       <td class="team">
         <div class="team-box">
-          <img src="assets/logos/${t.name}.png">
+          <img src="assets/logos/${t.name.toLowerCase()}.png">
           <span>${t.name}</span>
         </div>
       </td>
@@ -83,7 +83,7 @@ export function renderSchedule(update){
 
         <!-- TEAM KIRI -->
         <div class="team-side left">
-          <img src="assets/logos/${m.teamA}.png">
+          <img src="assets/logos/${m.teamA.toLowerCase()}.png">
           <span>${m.teamA}</span>
         </div>
 
@@ -99,7 +99,7 @@ export function renderSchedule(update){
 
         <!-- TEAM KANAN -->
         <div class="team-side right">
-          <img src="assets/logos/${m.teamB}.png">
+          <img src="assets/logos/${m.teamB.toLowerCase()}.png">
           <span>${m.teamB}</span>
         </div>
 
